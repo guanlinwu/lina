@@ -6,13 +6,20 @@ const chalk = require('chalk')
  */
 const figlet = require('figlet')
 console.log(
-  chalk.yellow(
-    figlet.textSync('lina', { horizontalLayout: 'full' })
-  )
+  chalk.magenta(figlet.textSync('lina', { horizontalLayout: 'full' }))
 )
 
-require('yargs')
+const argv = require('yargs')
   .commandDir('../cmds')
-  .demandCommand()
+  .alias('h', 'help')
+  .alias('v', 'version')
   .help()
-  .argv
+  .epilog(chalk.yellow('for more information visit https://github.com/guanlinwu/lina')) // final message to display when successful.
+  .fail((msg, err, yargs) => {
+    if (err) throw err
+    console.error(msg)
+    console.error('you can do \n', yargs.help())
+    process.exit(1)
+  }).argv
+
+console.log(argv)

@@ -1,5 +1,5 @@
-exports.command = 'init [dir]'
-exports.desc = 'Create an empty repo'
+exports.command = 'init'
+exports.desc = 'Create an config file in current directory'
 exports.builder = {
   dir: {
     default: '.'
