@@ -18,7 +18,7 @@ const argv = require('yargs')
   .fail((msg, err, yargs) => {
     if (err) throw err
     console.error(msg)
-    console.error('you can do \n', yargs.help())
+    console.error('you can do this: \n', yargs.help())
     process.exit(1)
   }).argv
 
