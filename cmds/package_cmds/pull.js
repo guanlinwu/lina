@@ -12,6 +12,7 @@ exports.handler = function (argv) {
   // 判断git版本号,必须大于1.7.0
   const gitVersionReg = /(\d\.\d{1,3}\.\d{1,3})/g
   let gitVersionResult = shell.exec('git --version').stdout.match(gitVersionReg)
+  console.log(gitVersionResult)
   if (gitVersionResult) {
     let versionArr = gitVersionResult[0].split('.')
   }
