@@ -10,7 +10,7 @@ console.log(
 )
 
 const argv = require('yargs')
-  .commandDir('../cmds', { recurse: true }/*  递归查找命令行 */)
+  .commandDir('../cmds', { recurse: true })
   .alias('h', 'help')
   .alias('v', 'version')
   .help()
