@@ -27,6 +27,8 @@ project/
 │
 ├── cores/
 │
+├── templates/
+│
 ├── utils/
 │
 └── CHANGELOG.md
@@ -37,6 +39,7 @@ project/
 + bin/ 导出的命令
 + cmds/ 命令模块
 + cores/ 核心业务代码 可自动更新
++ templates/ 文件模版 可自动更新
 + utils/ 工具包
 
 ## 设想
