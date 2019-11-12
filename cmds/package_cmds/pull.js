@@ -13,6 +13,6 @@ exports.handler = function (argv) {
   const gitVersionReg = /(\d\.\d{1,3}\.\d{1,3})/g
   let gitVersionResult = shell.exec('git --version').stdout.match(gitVersionReg)
   if (gitVersionResult) {
-    lgitVersionResult[0].split('.')
+    let versionArr = gitVersionResult[0].split('.')
   }
 }
