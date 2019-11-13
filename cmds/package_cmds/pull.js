@@ -60,7 +60,7 @@ exports.handler = function (argv) {
   while (len--) {
     if (depArr[len].alias === (gitAlias || literalAlias)){
       // 执行拉取文件夹操作
-      // 下面这里用解构会导致获取不了值，具体原因初步断定是asyncIterator搞鬼
+      // 下面这里用解构会导致获取不了值，具体原因还不知道
       let repository = depArr[len].repo
       let pkgSrc = depArr[len].src
       let dest = depArr[len].dest
@@ -98,8 +98,8 @@ exports.handler = function (argv) {
       rm('-rf', './.git')
       console.log('lina package 存放的目录:', pwd().stdout)
       mv(`./${pkgSrc}/${argv.pkgName}`, './')
-      rm('-rf', './src')
-      // 有可能上面的while没有结束，所以code默认为0
+      rm('-rf', `./${pkgSrc.split('/')[0]}`)
+      // 有可能上面的while没有结束，所以exitCode默认为0
       process.exit(0)
     })
   }
