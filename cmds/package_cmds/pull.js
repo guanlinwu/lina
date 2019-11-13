@@ -55,7 +55,6 @@ exports.handler = function (argv) {
   }).start('please wait patiently\n')
   const depArr = linaConfig.dependencies
   let len = depArr.length
-  console.log(argv)
   // 输入的参数 [--git-alias = lina] 或者 [--git-alias  lina]
   let { gitAlias, 'git-alias': literalAlias = 'lina' } = argv
   while (len--) {
@@ -97,7 +96,7 @@ exports.handler = function (argv) {
         spinner.succeed(`succeed pull ${argv.pkgName}`)
       }
       rm('-rf', './.git')
-      console.log(pwd().stdout)
+      console.log('lina package 存放的目录:', pwd().stdout)
       mv(`./${pkgSrc}/${argv.pkgName}`, './')
       rm('-rf', './src')
       // 有可能上面的while没有结束，所以code默认为0
