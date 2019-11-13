@@ -30,6 +30,7 @@ exports.handler = function (argv) {
   }
   // 执行拉取文件夹操作
   // 检查
+  // TODO:应该是读取当前目录下的lina.config.js 找到存放目录，同时把被拉下的组件的配置写进lina.config.js
   !fs.existsSync('./lina-packages') && mkdir('-p', './lina-packages')
   cd('./lina-packages')
   if (!fs.existsSync('.git')) {
@@ -49,7 +50,8 @@ exports.handler = function (argv) {
     exec('git config core.sparsecheckout true', { async: false })
     // echo /languages/ >> .git/info/sparse-checkout
     fs.writeFileSync('.git/info/sparse-checkout', `src/packages/${argv.pkgName}`)
-    exec(`git pull origin master`, { async: false })
+    exec(`git pull --depth=1 origin master`, { silent: true, async: false })
+    shell.echo('这里记得补充一下成功的语句')
   }
 
   /*
