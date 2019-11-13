@@ -22,4 +22,4 @@ const argv = require('yargs')
     process.exit(1)
   }).argv
 
-console.log(argv)
+// console.log('from bin/lina.js: ', argv)
