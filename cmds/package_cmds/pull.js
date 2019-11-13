@@ -62,6 +62,7 @@ exports.handler = function (argv) {
   while (len--) {
     if (depArr[len].alias === (gitAlias || literalAlias)){
       // 执行拉取文件夹操作
+      // 下面这里用解构会导致获取不了值，具体原因初步断定是asyncIterator搞鬼
       let repository = depArr[len].repo
       let pkgSrc = depArr[len].src
       let dest = depArr[len].dest
