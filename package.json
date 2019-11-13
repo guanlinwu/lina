@@ -1,5 +1,5 @@
 {
-  "name": "lina",
+  "name": "@lina/cli",
   "version": "1.0.0",
   "description": "lina components manage",
   "main": "index.js",
@@ -10,6 +10,7 @@
     "lina"
   ],
   "author": "guanlinwu",
+  "license": "ISC",
   "preferGlobal": true,
   "bin": {
     "lina": "bin/lina.js"
@@ -23,6 +24,7 @@
     "mem-fs": "^1.1.3",
     "mem-fs-editor": "^6.0.0",
     "shelljs": "^0.8.3",
+    "update-check": "^1.5.3",
     "yargs": "^14.2.0"
   }
 }

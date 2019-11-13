@@ -1,10 +1,14 @@
 #!/usr/bin/env node
 
 const chalk = require('chalk')
+const figlet = require('figlet')
+
+require('../utils/update-check').updateCheck() // 检查更新
+
+
 /**
  * 用_｜/\输出英文 lina
  */
-const figlet = require('figlet')
 console.log(
   chalk.magenta(figlet.textSync('lina', { horizontalLayout: 'full' }))
 )

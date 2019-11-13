@@ -11,9 +11,11 @@ config.gypi
 CVS
 npm-debug.log
 yarn.lock
+package-lock.json
 .babelrc
 .editorconfig
 .eslintignore
 .eslintrc.js
 .prettierrc.js
 Dev.md
+Plan.md
