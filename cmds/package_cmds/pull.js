@@ -2,16 +2,19 @@ const shell = require('shelljs')
 const semver = require('semver')
 const fs = require('fs')
 const ora = require('ora')
+const linaConfig = require('../../templates/lina.config')
 exports.command = 'pull <pkgName>'
 exports.desc = 'pull specific packages <pkgName> from remote repository'
 exports.builder = {}
 exports.handler = function (argv) {
-  const linaRepository = 'https://github.com/guanlinwu/lina-ui.git'
+  let linaRepository
+  let pkgSrc
   const {
     mkdir,
     cd,
     exec,
-    pwd
+    pwd,
+    rm
   } = shell
 
   // 判断是否有安装git
@@ -39,36 +42,40 @@ exports.handler = function (argv) {
     indent: 1,
     spinner: 'dots2'
   }).start('please wait patiently\n')
-
-  // 执行拉取文件夹操作
-  !fs.existsSync('./lina-packages') && mkdir('-p', './lina-packages')
-  cd('./lina-packages')
-  if (!fs.existsSync('.git')) {
-    pullPkg()
-  } else {
-    delDirectory('.git')
-    pullPkg()
+  const depArr = linaConfig.dependencies
+  let len = depArr.length
+  let argvAlias = argv.gitAlias || argv['git-alias'] || 'lina' // 输入的参数 [--git-alias = lina] 或者 [--git-alias  lina]
+  while (len--) {
+    if (depArr[len].alias === argvAlias){
+      // 执行拉取文件夹操作
+      linaRepository = depArr[len].repo
+      pkgSrc = depArr[len].src
+      !fs.existsSync('./lina-packages') && mkdir('-p', './lina-packages')
+      cd('./lina-packages')
+      pullPkg()
+    }
   }
+
   /*
   * 执行git 拉取操作
   * */
 
-  function  pullPkg() {
+  function pullPkg() {
     spinner.text = `now pulling ${argv.pkgName}\n`
-    shell.echo('current path:', pwd())
+    console.log('current path:', pwd().stdout)
     exec('git init', { silent: true, async: false })
     exec(`git remote add origin ${linaRepository}`, { silent: true, async: false })
     exec('git config core.sparsecheckout true', { async: false })
     // echo /languages/ >> .git/info/sparse-checkout
-    fs.writeFileSync('.git/info/sparse-checkout', `src/packages/${argv.pkgName}`)
+    fs.writeFileSync('.git/info/sparse-checkout', `${pkgSrc}/${argv.pkgName}`)
     exec(`git pull --depth=1 origin master`, function (code) {
       if(+code !== 0){
         spinner.fail(`fail to pull ${argv.pkgName}, please check parameter and try again`)
-        process.exit(0)
       } else {
         spinner.succeed(`succeed pull ${argv.pkgName}`)
-        process.exit(0)
       }
+      rm('-rf','./.git')
+      process.exit()
     })
   }
 
@@ -76,6 +83,7 @@ exports.handler = function (argv) {
   * 删除目录以及其内的文件（夹）
   * */
   function delDirectory (dir) {
+
     // 此处不用判断不存在路径，前面已经做判断
     const dirInfo = fs.statSync(dir)
     if (dirInfo.isDirectory()) { // 目录
