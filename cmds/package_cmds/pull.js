@@ -1,6 +1,7 @@
 const shell = require('shelljs')
 const semver = require('semver')
 const fs = require('fs')
+const ora = require('ora')
 exports.command = 'pull <pkgName>'
 exports.desc = 'pull specific packages <pkgName> from remote repository'
 exports.builder = {}
@@ -12,12 +13,14 @@ exports.handler = function (argv) {
     exec,
     pwd
   } = shell
+
   // 判断是否有安装git
   if (!shell.which('git')) {
     shell.echo('Sorry, this script requires git')
     shell.echo('\u001b[32m click here to download https://git-scm.com\u001b[0m')
     process.exit(1) // 强制退出
   }
+
   // 判断git版本号,必须大于1.7.0
   const gitVersionReg = /(\d\.\d{1,4}\.\d{1,4})/g
   let gitVersionResult = shell.exec('git --version', {silent: true}).stdout.match(gitVersionReg)
@@ -28,9 +31,16 @@ exports.handler = function (argv) {
       process.exit(1)
     }
   }
+  /*
+  * ora 配置,see https://www.npmjs.com/package/ora
+  * */
+  const spinner = ora({
+    color: 'green',
+    indent: 1,
+    spinner: 'dots2'
+  }).start('please wait patiently\n')
+
   // 执行拉取文件夹操作
-  // 检查
-  // TODO:应该是读取当前目录下的lina.config.js 找到存放目录，同时把被拉下的组件的配置写进lina.config.js
   !fs.existsSync('./lina-packages') && mkdir('-p', './lina-packages')
   cd('./lina-packages')
   if (!fs.existsSync('.git')) {
@@ -44,18 +54,26 @@ exports.handler = function (argv) {
   * */
 
   function  pullPkg() {
+    spinner.text = `now pulling ${argv.pkgName}\n`
     shell.echo('current path:', pwd())
     exec('git init', { silent: true, async: false })
     exec(`git remote add origin ${linaRepository}`, { silent: true, async: false })
     exec('git config core.sparsecheckout true', { async: false })
     // echo /languages/ >> .git/info/sparse-checkout
     fs.writeFileSync('.git/info/sparse-checkout', `src/packages/${argv.pkgName}`)
-    exec(`git pull --depth=1 origin master`, { silent: true, async: false })
-    shell.echo('这里记得补充一下成功的语句')
+    exec(`git pull --depth=1 origin master`, function (code) {
+      if(+code !== 0){
+        spinner.fail(`fail to pull ${argv.pkgName}, please check parameter and try again`)
+        process.exit(0)
+      } else {
+        spinner.succeed(`succeed pull ${argv.pkgName}`)
+        process.exit(0)
+      }
+    })
   }
 
   /*
-  * 删除目录
+  * 删除目录以及其内的文件（夹）
   * */
   function delDirectory (dir) {
     // 此处不用判断不存在路径，前面已经做判断
