@@ -13,18 +13,14 @@ exports.handler = function (argv) {
     exec,
     pwd
   } = shell
-  const spinner = ora({
-    color: 'green',
-    indent: 1,
-    spinner: 'dots2'
-  }).start('please wait patiently\n')
+
   // 判断是否有安装git
   if (!shell.which('git')) {
     shell.echo('Sorry, this script requires git')
     shell.echo('\u001b[32m click here to download https://git-scm.com\u001b[0m')
-    spinner.stop()
     process.exit(1) // 强制退出
   }
+
   // 判断git版本号,必须大于1.7.0
   const gitVersionReg = /(\d\.\d{1,4}\.\d{1,4})/g
   let gitVersionResult = shell.exec('git --version', {silent: true}).stdout.match(gitVersionReg)
@@ -32,12 +28,19 @@ exports.handler = function (argv) {
     if (!semver.gt(gitVersionResult[0], '1.7.0')) {
       console.log('\u001b[31m your git version is too low,please update\u001b[0m')
       console.log('\u001b[32m click here to download https://git-scm.com\u001b[0m')
-      spinner.stop()
       process.exit(1)
     }
   }
+  /*
+  * ora 配置,see https://www.npmjs.com/package/ora
+  * */
+  const spinner = ora({
+    color: 'green',
+    indent: 1,
+    spinner: 'dots2'
+  }).start('please wait patiently\n')
+
   // 执行拉取文件夹操作
-  // 检查
   !fs.existsSync('./lina-packages') && mkdir('-p', './lina-packages')
   cd('./lina-packages')
   if (!fs.existsSync('.git')) {
@@ -70,7 +73,7 @@ exports.handler = function (argv) {
   }
 
   /*
-  * 删除目录
+  * 删除目录以及其内的文件（夹）
   * */
   function delDirectory (dir) {
     // 此处不用判断不存在路径，前面已经做判断
