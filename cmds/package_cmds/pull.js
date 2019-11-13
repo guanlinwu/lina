@@ -2,13 +2,15 @@ const shell = require('shelljs')
 const semver = require('semver')
 const fs = require('fs')
 const ora = require('ora')
-const linaConfig = require('../../templates/lina.config')
+const chalk = require('chalk')
+
+const initConfig = require('../../cores/init-config.js') // 初始化逻辑
+const configFileName = 'lina.config.js' // 配置文件名称
+
 exports.command = 'pull <pkgName>'
 exports.desc = 'pull specific packages <pkgName> from remote repository'
 exports.builder = {}
 exports.handler = function (argv) {
-  let linaRepository
-  let pkgSrc
   const {
     mkdir,
     cd,
@@ -16,6 +18,14 @@ exports.handler = function (argv) {
     pwd,
     rm
   } = shell
+  // 如果不存在配置文件, 则提示需要执行lina init
+  if (!initConfig.hasInit()) {
+    shell.echo(chalk.red(`Sorry, this config file ${chalk.yellow(configFileName)} is not found.`))
+    shell.echo(chalk.red(`Please try run ${chalk.yellow('lina init')} command first`))
+    process.exit(1) // 强制退出
+  }
+
+  const linaConfig = require(`${pwd().stdout}/${configFileName}`) // 获取配置文件
 
   // 判断是否有安装git
   if (!shell.which('git')) {
@@ -48,11 +58,14 @@ exports.handler = function (argv) {
   while (len--) {
     if (depArr[len].alias === argvAlias){
       // 执行拉取文件夹操作
-      linaRepository = depArr[len].repo
-      pkgSrc = depArr[len].src
+      let repository = depArr[len].repo
+      let pkgSrc = depArr[len].src
       !fs.existsSync('./lina-packages') && mkdir('-p', './lina-packages')
       cd('./lina-packages')
-      pullPkg()
+      pullPkg({
+        repository,
+        pkgSrc
+      })
     }
   }
 
@@ -60,11 +73,14 @@ exports.handler = function (argv) {
   * 执行git 拉取操作
   * */
 
-  function pullPkg() {
+  function pullPkg({
+    repository,
+    pkgSrc
+  }) {
     spinner.text = `now pulling ${argv.pkgName}\n`
     console.log('current path:', pwd().stdout)
     exec('git init', { silent: true, async: false })
-    exec(`git remote add origin ${linaRepository}`, { silent: true, async: false })
+    exec(`git remote add origin ${repository}`, { silent: true, async: false })
     exec('git config core.sparsecheckout true', { async: false })
     // echo /languages/ >> .git/info/sparse-checkout
     fs.writeFileSync('.git/info/sparse-checkout', `${pkgSrc}/${argv.pkgName}`)
