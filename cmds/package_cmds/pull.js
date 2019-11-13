@@ -52,6 +52,10 @@ exports.handler = function (argv) {
     indent: 1,
     spinner: 'dots2'
   }).start('please wait patiently\n')
+
+  /*
+  * 寻找对应的包并拉取
+  * */
   const depArr = linaConfig.dependencies
   let len = depArr.length
   let argvAlias = argv.gitAlias || argv['git-alias'] || 'lina' // 输入的参数 [--git-alias = lina] 或者 [--git-alias  lina]
@@ -91,7 +95,7 @@ exports.handler = function (argv) {
         spinner.succeed(`succeed pull ${argv.pkgName}`)
       }
       rm('-rf','./.git')
-      process.exit()
+      process.exit(0) // 有可能上面的while没有结束，所以code默认为0
     })
   }
 
