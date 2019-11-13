@@ -1,6 +1,7 @@
 const shell = require('shelljs')
 const semver = require('semver')
 const fs = require('fs')
+const ora = require('ora')
 exports.command = 'pull <pkgName>'
 exports.desc = 'pull specific packages <pkgName> from remote repository'
 exports.builder = {}
@@ -12,10 +13,16 @@ exports.handler = function (argv) {
     exec,
     pwd
   } = shell
+  const spinner = ora({
+    color: 'green',
+    indent: 1,
+    spinner: 'dots2'
+  }).start('please wait patiently\n')
   // 判断是否有安装git
   if (!shell.which('git')) {
     shell.echo('Sorry, this script requires git')
     shell.echo('\u001b[32m click here to download https://git-scm.com\u001b[0m')
+    spinner.stop()
     process.exit(1) // 强制退出
   }
   // 判断git版本号,必须大于1.7.0
@@ -25,6 +32,7 @@ exports.handler = function (argv) {
     if (!semver.gt(gitVersionResult[0], '1.7.0')) {
       console.log('\u001b[31m your git version is too low,please update\u001b[0m')
       console.log('\u001b[32m click here to download https://git-scm.com\u001b[0m')
+      spinner.stop()
       process.exit(1)
     }
   }
@@ -43,13 +51,22 @@ exports.handler = function (argv) {
   * */
 
   function  pullPkg() {
+    spinner.text = `now pulling ${argv.pkgName}\n`
     shell.echo('current path:', pwd())
     exec('git init', { silent: true, async: false })
     exec(`git remote add origin ${linaRepository}`, { silent: true, async: false })
     exec('git config core.sparsecheckout true', { async: false })
     // echo /languages/ >> .git/info/sparse-checkout
     fs.writeFileSync('.git/info/sparse-checkout', `src/packages/${argv.pkgName}`)
-    exec(`git pull origin master`, { async: false })
+    exec(`git pull origin master`, function (code) {
+      if(+code !== 0){
+        spinner.fail(`fail to pull ${argv.pkgName}, please check parameter and try again`)
+        process.exit(0)
+      } else {
+        spinner.succeed(`succeed pull ${argv.pkgName}`)
+        process.exit(0)
+      }
+    })
   }
 
   /*
