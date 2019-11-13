@@ -3,6 +3,7 @@
  * @see https://www.npmjs.com/package/update-check
  */
 const pkg = require('../package.json')
+const chalk = require('chalk')
 const checkForUpdate = require('update-check')
 
 const updateCheck = async () => {
@@ -15,7 +16,7 @@ const updateCheck = async () => {
   }
 
   if (update) {
-    console.log(`The latest version is ${update.latest}. Please update lina!`)
+    console.log(chalk.green(`The latest version is ${update.latest}. Please update lina!`))
   }
 }
 
