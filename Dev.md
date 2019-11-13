@@ -51,3 +51,14 @@ cli 仅仅是命令的入口，会调用 core 来完成真正的功能。好处�
 
 ## 备忘
 cores/init-config.js 有一个hasInit的方法，用来判断是否已经初始化配置文件
+
+## cores 热更新
+对于cores目录下的文件，都必须遵守以下格式，才能进行热更新
++ 文件头格式
+```javascript
+// ==UserScript==
+// @name         git操作
+// @version      0.0.1
+// @description  git操作
+// ==/UserScript==
+```

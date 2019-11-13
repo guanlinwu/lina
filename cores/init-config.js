@@ -1,6 +1,8 @@
-/**
- * 初始化配置，生成lina.conf.js
- */
+// ==UserScript==
+// @name         init-config 初始化配置
+// @version      0.0.1
+// @description  初始化配置，生成lina.conf.js
+// ==/UserScript==
 
 const fs = require('fs')
 const path = require('path')

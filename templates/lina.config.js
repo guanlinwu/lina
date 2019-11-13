@@ -2,7 +2,7 @@ module.exports = {
   version: '1.0.0', // 当前config的版本
   // mainPackage: [],
   // subPackages: [],
-  dependencies: [
+  dependencies: [ // 为什么用数组？因为想达到只要提供git仓库、需要拉取目录都能把文件拉下来二次开发
     {
       repo: 'https://github.com/guanlinwu/lina-ui.git',
       alias: 'lina', // lina package pull [组件] [git-alias], 这时候，git-alias = lina
