@@ -57,8 +57,7 @@ exports.handler = function (argv) {
   let len = depArr.length
   console.log(argv)
   // 输入的参数 [--git-alias = lina] 或者 [--git-alias  lina]
-  let { gitAlias } = argv
-  let { 'git-alias': literalAlias = 'lina' } = argv
+  let { gitAlias, 'git-alias': literalAlias = 'lina' } = argv
   while (len--) {
     if (depArr[len].alias === (gitAlias || literalAlias)){
       // 执行拉取文件夹操作
