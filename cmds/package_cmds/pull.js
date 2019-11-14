@@ -16,7 +16,8 @@ exports.handler = function (argv) {
     cd,
     exec,
     pwd,
-    rm
+    rm,
+    mv
   } = shell
   // 如果不存在配置文件, 则提示需要执行lina init
   if (!initConfig.hasInit()) {
@@ -24,8 +25,8 @@ exports.handler = function (argv) {
     shell.echo(chalk.red(`Please try run ${chalk.yellow('lina init')} command first`))
     process.exit(1) // 强制退出
   }
-
-  const linaConfig = require(`${pwd().stdout}/${configFileName}`) // 获取配置文件
+  // 获取配置文件
+  const linaConfig = require(`${pwd().stdout}/${configFileName}`)
 
   // 判断是否有安装git
   if (!shell.which('git')) {
@@ -52,20 +53,20 @@ exports.handler = function (argv) {
     indent: 1,
     spinner: 'dots2'
   }).start('please wait patiently\n')
-
-  /*
-  * 寻找对应的包并拉取
-  * */
   const depArr = linaConfig.dependencies
   let len = depArr.length
-  let argvAlias = argv.gitAlias || argv['git-alias'] || 'lina' // 输入的参数 [--git-alias = lina] 或者 [--git-alias  lina]
+  // 输入的参数 [--git-alias = lina] 或者 [--git-alias  lina]
+  let { gitAlias, 'git-alias': literalAlias = 'lina' } = argv
   while (len--) {
-    if (depArr[len].alias === argvAlias){
+    if (depArr[len].alias === (gitAlias || literalAlias)){
       // 执行拉取文件夹操作
+      // 下面这里用解构会导致获取不了值，具体原因还不知道
       let repository = depArr[len].repo
       let pkgSrc = depArr[len].src
-      !fs.existsSync('./lina-packages') && mkdir('-p', './lina-packages')
-      cd('./lina-packages')
+      let dest = depArr[len].dest
+      dest = `./${dest}`
+      !fs.existsSync(dest) && mkdir('-p', dest)
+      cd(dest)
       pullPkg({
         repository,
         pkgSrc
@@ -78,9 +79,9 @@ exports.handler = function (argv) {
   * */
 
   function pullPkg({
-    repository,
-    pkgSrc
-  }) {
+                     repository,
+                     pkgSrc
+                   }) {
     spinner.text = `now pulling ${argv.pkgName}\n`
     console.log('current path:', pwd().stdout)
     exec('git init', { silent: true, async: false })
@@ -94,8 +95,12 @@ exports.handler = function (argv) {
       } else {
         spinner.succeed(`succeed pull ${argv.pkgName}`)
       }
-      rm('-rf','./.git')
-      process.exit(0) // 有可能上面的while没有结束，所以code默认为0
+      rm('-rf', './.git')
+      console.log('lina package 存放的目录:', pwd().stdout)
+      mv(`./${pkgSrc}/${argv.pkgName}`, './')
+      rm('-rf', `./${pkgSrc.split('/')[0]}`)
+      // 有可能上面的while没有结束，所以exitCode默认为0
+      process.exit(0)
     })
   }
 
@@ -120,4 +125,4 @@ exports.handler = function (argv) {
       fs.unlinkSync(dir) // 删除文件
     }
   }
-  }
+}
