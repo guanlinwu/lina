@@ -1,5 +1,10 @@
 # lina
 
+## 安装
+```bash
+$ npm i -g @linahome/cli
+```
+
 ## 相关指令
 ```bash
 # 初始化配置, 在当前文件夹创建一个lina.config.js, 用以作为lina的配置

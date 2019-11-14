@@ -4,6 +4,7 @@
  */
 const pkg = require('../package.json')
 const chalk = require('chalk')
+const boxen = require('boxen')
 const checkForUpdate = require('update-check')
 
 const updateCheck = async () => {
@@ -16,7 +17,18 @@ const updateCheck = async () => {
   }
 
   if (update) {
-    console.log(chalk.green(`The latest version is ${update.latest}. Please update lina!`))
+    let installCommand = `npm i -g @linahome/cli`
+    let message = 'Update available ' + chalk.dim(pkg.version) + chalk.reset(' → ') + chalk.green(update.latest) + ' \nRun ' + chalk.cyan(installCommand) + ' to update'
+    let boxenOpts = {
+			padding: 1,
+			margin: 1,
+			align: 'center',
+			borderColor: 'yellow',
+			borderStyle: 'double'
+    }
+    const result = boxen(message, boxenOpts)
+
+    console.log(result)
   }
 }
 
