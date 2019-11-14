@@ -83,6 +83,7 @@ exports.handler = function (argv) {
           type: 'rawlist',
           name: 'package',
           message: '请选择模块名',
+          pageSize: packageData.length,
           choices: packageData.map(item => item.name)
         }
       ])
