@@ -70,9 +70,9 @@ exports.handler = function (argv) {
       spinner: 'dots2'
     }).start('please wait patiently\n')
 
-    findPkg()
+    findPkg() // 如果命令行有模块名直接进行拉去操作
   } else {
-    inputPackage()
+    inputPackage() // 如果命令行没有模块名，则需要远程拉取所有包名
   }
 
   async function inputPackage() {
