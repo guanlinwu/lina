@@ -3,13 +3,17 @@ const semver = require('semver')
 const fs = require('fs')
 const ora = require('ora')
 const chalk = require('chalk')
-
+const inquirer = require('inquirer')
 const initConfig = require('../../cores/init-config.js') // 初始化逻辑
 const configFileName = 'lina.config.js' // 配置文件名称
-
-exports.command = 'pull <pkgName>'
+const fly = require('flyio')
+exports.command = 'pull [pkgName]'
 exports.desc = 'pull specific packages <pkgName> from remote repository'
-exports.builder = {}
+exports.builder = {
+  pkgName: {
+    default: ''
+  }
+}
 exports.handler = function (argv) {
   const {
     mkdir,
@@ -19,6 +23,13 @@ exports.handler = function (argv) {
     rm,
     mv
   } = shell
+  // ora容器
+  let spinner = null
+  // 所有包的数据
+  let packageData = []
+  // 要安装的包名
+  let packageName = ''
+
   // 如果不存在配置文件, 则提示需要执行lina init
   if (!initConfig.hasInit()) {
     shell.echo(chalk.red(`Sorry, this config file ${chalk.yellow(configFileName)} is not found.`))
@@ -45,32 +56,84 @@ exports.handler = function (argv) {
       process.exit(1)
     }
   }
+
+  if (argv.pkgName) { // 如果指令有参数（模块名）
+
+    /*
+   * ora 配置
+   * see https://www.npmjs.com/package/ora
+   *
+   * */
+    spinner = ora({
+      color: 'green',
+      indent: 1,
+      spinner: 'dots2'
+    }).start('please wait patiently\n')
+
+    findPkg()
+  } else {
+    inputPackage()
+  }
+
+  async function inputPackage() {
+    try {
+      await getPackageData('https://raw.githubusercontent.com/guanlinwu/lina-ui/master/src/config.json')
+      let response = await inquirer.prompt([
+        {
+          type: 'rawlist',
+          name: 'package',
+          message: '请选择包名',
+          choices: packageData.map(item => item.name)
+        }
+      ])
+      console.log('已选模块：', response.package)
+      packageName = response.package
+
+      spinner = ora({
+        color: 'green',
+        indent: 1,
+        spinner: 'dots2'
+      }).start('please wait patiently\n')
+
+      findPkg()
+
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
   /*
-  * ora 配置,see https://www.npmjs.com/package/ora
+  * 获取所有的包的数据
+  *
   * */
-  const spinner = ora({
-    color: 'green',
-    indent: 1,
-    spinner: 'dots2'
-  }).start('please wait patiently\n')
-  const depArr = linaConfig.dependencies
-  let len = depArr.length
-  // 输入的参数 [--git-alias = lina] 或者 [--git-alias  lina]
-  let { gitAlias, 'git-alias': literalAlias = 'lina' } = argv
-  while (len--) {
-    if (depArr[len].alias === (gitAlias || literalAlias)){
-      // 执行拉取文件夹操作
-      // 下面这里用解构会导致获取不了值，具体原因还不知道
-      let repository = depArr[len].repo
-      let pkgSrc = depArr[len].src
-      let dest = depArr[len].dest
-      dest = `./${dest}`
-      !fs.existsSync(dest) && mkdir('-p', dest)
-      cd(dest)
-      pullPkg({
-        repository,
-        pkgSrc
-      })
+
+ async function getPackageData(url) {
+     let { data } = await fly.get(url)
+     packageData = JSON.parse(data).packages
+  }
+
+  /*
+  * 从命令行和linaConfig中获取仓库地址（别名）和其它信息
+  * */
+  function findPkg () {
+    const depArr = linaConfig.dependencies
+    let len = depArr.length
+    // 输入的参数 [--git-alias = lina] 或者 [--git-alias  lina]
+    let {gitAlias, 'git-alias': literalAlias = 'lina'} = argv
+    while (len --) {
+      if (depArr[len].alias === (gitAlias || literalAlias)) {
+        // 执行拉取文件夹操作
+        let repository = depArr[len].repo
+        let pkgSrc = depArr[len].src
+        let dest = depArr[len].dest
+        dest = `./${dest}`
+        !fs.existsSync(dest) && mkdir('-p', dest)
+        cd(dest)
+        pullPkg({
+          repository,
+          pkgSrc
+        })
+      }
     }
   }
 
@@ -82,22 +145,22 @@ exports.handler = function (argv) {
                      repository,
                      pkgSrc
                    }) {
-    spinner.text = `now pulling ${argv.pkgName}\n`
+    spinner.text = `now pulling ${argv.pkgName || packageName}\n`
     console.log('current path:', pwd().stdout)
     exec('git init', { silent: true, async: false })
     exec(`git remote add origin ${repository}`, { silent: true, async: false })
     exec('git config core.sparsecheckout true', { async: false })
     // echo /languages/ >> .git/info/sparse-checkout
-    fs.writeFileSync('.git/info/sparse-checkout', `${pkgSrc}/${argv.pkgName}`)
+    fs.writeFileSync('.git/info/sparse-checkout', `${pkgSrc}/${argv.pkgName || packageName}`)
     exec(`git pull --depth=1 origin master`, function (code) {
       if(+code !== 0){
-        spinner.fail(`fail to pull ${argv.pkgName}, please check parameter and try again`)
+        spinner.fail(`fail to pull ${argv.pkgName || packageName}, please check parameter and try again`)
       } else {
-        spinner.succeed(`succeed pull ${argv.pkgName}`)
+        spinner.succeed(`succeed pull ${argv.pkgName || packageName}`)
       }
       rm('-rf', './.git')
       console.log('lina package 存放的目录:', pwd().stdout)
-      mv(`./${pkgSrc}/${argv.pkgName}`, './')
+      mv(`./${pkgSrc}/${argv.pkgName || packageName}`, './')
       rm('-rf', `./${pkgSrc.split('/')[0]}`)
       // 有可能上面的while没有结束，所以exitCode默认为0
       process.exit(0)
