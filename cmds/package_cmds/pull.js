@@ -78,7 +78,7 @@ exports.handler = function (argv) {
   async function inputPackage() {
     try {
       await getPackageData(configUrl)
-      let response = await inquirer.prompt([
+      let { package } = await inquirer.prompt([
         {
           type: 'rawlist',
           name: 'package',
@@ -86,8 +86,8 @@ exports.handler = function (argv) {
           choices: packageData.map(item => item.name)
         }
       ])
-      console.log('已选模块：', response.package)
-      packageName = response.package
+      console.log('已选模块：', package)
+      packageName = package
 
       spinner = ora({
         color: 'green',
