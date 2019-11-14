@@ -29,7 +29,7 @@ exports.handler = function (argv) {
   let packageData = []
   // 要安装的包名
   let packageName = ''
-
+  let configUrl = 'https://raw.githubusercontent.com/guanlinwu/lina-ui/master/src/config.json'
   // 如果不存在配置文件, 则提示需要执行lina init
   if (!initConfig.hasInit()) {
     shell.echo(chalk.red(`Sorry, this config file ${chalk.yellow(configFileName)} is not found.`))
@@ -77,7 +77,7 @@ exports.handler = function (argv) {
 
   async function inputPackage() {
     try {
-      await getPackageData('https://raw.githubusercontent.com/guanlinwu/lina-ui/master/src/config.json')
+      await getPackageData(configUrl)
       let response = await inquirer.prompt([
         {
           type: 'rawlist',
