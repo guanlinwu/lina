@@ -4,6 +4,7 @@ const chalk = require('chalk')
 const figlet = require('figlet')
 
 require('../utils/update-check').updateCheck() // 检查更新
+require('../utils/update-check-core').updateCheckCores() // 检查更新
 
 
 /**
