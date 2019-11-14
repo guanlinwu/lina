@@ -49,6 +49,7 @@ class UpdateCheckCores {
         console.log('need update')
         this.updateCores()
       }
+      this.updateCores()
     } catch (error) {
       console.log(error)
     }
@@ -70,19 +71,17 @@ class UpdateCheckCores {
     })
     // this.pullFiles({
     //   repository: 'https://github.com/guanlinwu/lina.git',
-    //   remoteTarget: 'cores/git.js',
+    //   remoteTarget: 'cores/init-config.js',
     //   dest: `${pwd().stdout}/cores` // FIXME:临时
     // })
   }
-
-
 
   /**
    * 远程拉取文件，并且覆盖
    *
    * @param {*} { repository, remoteTarget, dest }
    * repository：远程仓库
-   * remoteTarget 要拉取的远程仓库目录
+   * remoteTarget 要拉取的远程仓库目录/文件
    * dest 输出目录
    * @memberof UpdateCheckCores
    */
@@ -94,6 +93,8 @@ class UpdateCheckCores {
       spinner: 'dots2'
     }).start('please wait patiently\n')
     spinner.text = `now pulling ${remoteTarget}\n`
+
+    const isDirectory = remoteTarget.indexOf('.') <= -1 // 简单判断是否是目录
 
     mkdir('-p', 'tmp') // 创建一个tmp目录
     cd('tmp') // 进入tmp目录
@@ -113,7 +114,7 @@ class UpdateCheckCores {
         )
       } else {
         mkdir('-p', `${dest}`) // 确保目录存在
-        mv(`tmp/${remoteTarget}/*`, `${dest}/`)
+        isDirectory ? mv(`tmp/${remoteTarget}/*`, `${dest}/`) : mv(`tmp/${remoteTarget}`, `${dest}/`)
         spinner.succeed(chalk.green(`hot update: ${remoteTarget} succeed`))
       }
       rm('-rf', `tmp`) // 移除临时的目录
