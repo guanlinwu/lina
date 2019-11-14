@@ -82,7 +82,7 @@ exports.handler = function (argv) {
         {
           type: 'rawlist',
           name: 'package',
-          message: '请选择包名',
+          message: '请选择模块名',
           choices: packageData.map(item => item.name)
         }
       ])
