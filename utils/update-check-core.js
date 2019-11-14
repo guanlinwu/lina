@@ -7,10 +7,8 @@
 const fs = require('fs')
 const path = require('path')
 const pkg = require('../package.json')
-const packageJson = require('package-json')
 const fly = require('flyio')
 const chalk = require('chalk')
-const boxen = require('boxen')
 const shell = require('shelljs')
 const ora = require('ora')
 const semver = require('semver')
@@ -70,9 +68,26 @@ class UpdateCheckCores {
       remoteTarget: 'cores',
       dest: `${pwd().stdout}/cores` // FIXME:临时
     })
+    // this.pullFiles({
+    //   repository: 'https://github.com/guanlinwu/lina.git',
+    //   remoteTarget: 'cores/git.js',
+    //   dest: `${pwd().stdout}/cores` // FIXME:临时
+    // })
   }
 
+
+
+  /**
+   * 远程拉取文件，并且覆盖
+   *
+   * @param {*} { repository, remoteTarget, dest }
+   * repository：远程仓库
+   * remoteTarget 要拉取的远程仓库目录
+   * dest 输出目录
+   * @memberof UpdateCheckCores
+   */
   pullFiles({ repository, remoteTarget, dest }) {
+    // console.log(remoteTarget)
     const spinner = ora({ // loading
       color: 'green',
       indent: 1,

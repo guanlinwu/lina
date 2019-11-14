@@ -1,7 +1,7 @@
 {
   "name": "@linahome/cli",
   "version": "1.0.1",
-  "coresVersion": "0.0.0",
+  "coresVersion": "1.0.0",
   "description": "lina components manage",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -33,7 +33,6 @@
     "mem-fs": "^1.1.3",
     "mem-fs-editor": "^6.0.0",
     "ora": "^4.0.3",
-    "package-json": "^6.5.0",
     "semver": "^6.3.0",
     "shelljs": "^0.8.3",
     "update-check": "^1.5.3",
