@@ -49,7 +49,6 @@ class UpdateCheckCores {
         console.log('need update')
         this.updateCores()
       }
-      this.updateCores()
     } catch (error) {
       console.log(error)
     }
