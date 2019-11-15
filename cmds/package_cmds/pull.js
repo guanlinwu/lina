@@ -178,26 +178,4 @@ exports.handler = function (argv) {
       process.exit(0)
     })
   }
-
-  /*
-   * 删除目录以及其内的文件（夹）
-   * */
-  function delDirectory(dir) {
-
-    // 此处不用判断不存在路径，前面已经做判断
-    const dirInfo = fs.statSync(dir)
-    if (dirInfo.isDirectory()) { // 目录
-      const dirData = fs.readdirSync(dir) // 目录数据
-      if (dirData.length > 0) {
-        for (let i = 0; i < dirData.length; i ++) { // 好像for 比 forEach会好点, 不过应该没差别
-          delDirectory(`${ dir }/${ dirData[i] }`) // 这里递归调用，因为它是目录
-          dirData.length - 1 === i && delDirectory(dir) // 删除完该目录里面的内容之后，需要把这个目录删了
-        }
-      } else {
-        fs.rmdirSync(dir) // 空目录
-      }
-    } else if (dirInfo.isFile()) {
-      fs.unlinkSync(dir) // 删除文件
-    }
-  }
 }
