@@ -1,5 +1,5 @@
 exports.command = 'package pull <packageName>'
-exports.description = 'pull package(s) from specified Repository '
+exports.description = 'Pull package(s) from specified Repository '
 exports.builder = function (yargs) {
   return yargs.commandDir('package_cmds')
 }
