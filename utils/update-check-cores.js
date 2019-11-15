@@ -89,7 +89,7 @@ class UpdateCheckCores {
           silent
         })
       } else {
-        !silent && console.log(chalk.green(`the cores is latest: ${this.remotePkg.coresVersion}`))
+        !silent && console.log(chalk.green(`Already the latest version: ${this.remotePkg.coresVersion}`))
       }
     } catch (error) {
       console.log(error)
