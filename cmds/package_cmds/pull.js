@@ -22,12 +22,6 @@ exports.handler = function (argv) {
     mv,
     which
   } = shell
-  // 获取配置文件
-  const linaConfig = require(`${ pwd().stdout }/${ configFileName }`)
-  const options = {
-    argv,
-    linaConfig
-  }
 
   // 如果不存在配置文件, 则提示需要执行lina init
   if (!initConfig.hasInit()) {
@@ -36,6 +30,13 @@ exports.handler = function (argv) {
     process.exit(1) // 强制退出
   }
 
+  // 获取配置文件
+  const linaConfig = require(`${ pwd().stdout }/${ configFileName }`)
+  // props of class
+  const options = {
+    argv,
+    linaConfig
+  }
 
   // 判断是否有安装git
   if (!which('git')) {

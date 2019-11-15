@@ -39,6 +39,12 @@ class HandlePull {
 
       this.findPkg() // 如果命令行有模块名直接进行拉去操作
     } else {
+      spinner = ora({
+        color: 'green',
+        indent: 1,
+        spinner: 'dots5'
+      }).start('getting all packages, please wait for a moment...\n')
+
       this.getPackagesName() // 如果命令行没有模块名，则需要远程拉取所有包名
     }
 
@@ -60,6 +66,7 @@ class HandlePull {
     try {
       let { data } = await fly.get(configUrl)
       packageData = JSON.parse(data).packages
+      spinner.succeed(`got all packages, enjoy it`)
       let { packages } = await inquirer.prompt([
         {
           type: 'rawlist',
@@ -82,6 +89,7 @@ class HandlePull {
 
     } catch (e) {
       console.error('错误✖', e)
+      spinner.fail('error')
     }
   }
 
@@ -126,7 +134,7 @@ class HandlePull {
     exec('git config core.sparsecheckout true', { async: false })
     // echo /languages/ >> .git/info/sparse-checkout
     fs.writeFileSync('.git/info/sparse-checkout', `${ pkgSrc }/${ this.argv.pkgName || packageName }`)
-    exec(`git pull --depth=1 origin master`, function (code) {
+    exec(`git pull --depth=1 origin master`, { silent: true }, function (code) {
       if (+ code !== 0) {
         spinner.fail(`fail to pull ${ self.argv.pkgName || packageName }, please check parameter and try again`)
       } else {
