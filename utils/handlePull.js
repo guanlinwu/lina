@@ -134,7 +134,7 @@ class HandlePull {
       }
       rm('-rf', './.git')
       console.log('lina package 存放的目录:', pwd().stdout)
-      mv(`./${ pkgSrc }/${ this.argv.pkgName || packageName }`, './')
+      mv(`./${ pkgSrc }/${ self.argv.pkgName || packageName }`, './')
       rm('-rf', `./${ pkgSrc.split('/')[0] }`)
       // 有可能上面的while没有结束，所以exitCode默认为0
       process.exit(0)
