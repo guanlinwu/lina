@@ -7,7 +7,6 @@ module.exports = {
       repo: 'https://github.com/guanlinwu/lina-ui.git',
       alias: 'lina', // lina package pull [组件] [git-alias], 这时候，git-alias = lina
       src: 'src/packages', // 仓库的路径
-      config: 'https://raw.githubusercontent.com/guanlinwu/lina-ui/master/src/config.json',
       dest: '<%= dest %>', // 该模块存放的开发目录
       config: 'https://raw.githubusercontent.com/guanlinwu/lina-ui/master/src/config.json', // 组件版本控制文件
       items: [ // 需要更新的模块

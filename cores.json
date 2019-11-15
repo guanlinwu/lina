@@ -1,5 +1,5 @@
 {
-  "coresVersion": "1.0.0",
+  "coresVersion": "1.0.1",
   "updateTargets": [
     {
       "repository": "https://github.com/guanlinwu/lina.git",
