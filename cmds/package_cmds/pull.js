@@ -55,5 +55,5 @@ exports.handler = function (argv) {
     }
   }
 
-  new HandlePull(options)
+  new HandlePull.HandlePull(options)
 }

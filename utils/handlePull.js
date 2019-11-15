@@ -118,6 +118,7 @@ class HandlePull {
    * */
 
   pullPkg({ repository, pkgSrc }) {
+    let self = this
     spinner.text = `now pulling ${ this.argv.pkgName || packageName }\n`
     console.log('current path:', pwd().stdout)
     exec('git init', { silent: true, async: false })
@@ -127,9 +128,9 @@ class HandlePull {
     fs.writeFileSync('.git/info/sparse-checkout', `${ pkgSrc }/${ this.argv.pkgName || packageName }`)
     exec(`git pull --depth=1 origin master`, function (code) {
       if (+ code !== 0) {
-        spinner.fail(`fail to pull ${ this.pkgName || packageName }, please check parameter and try again`)
+        spinner.fail(`fail to pull ${ self.argv.pkgName || packageName }, please check parameter and try again`)
       } else {
-        spinner.succeed(`succeed pull ${ this.pkgName || packageName }`)
+        spinner.succeed(`succeed pull ${ self.argv.pkgName || packageName }`)
       }
       rm('-rf', './.git')
       console.log('lina package 存放的目录:', pwd().stdout)
