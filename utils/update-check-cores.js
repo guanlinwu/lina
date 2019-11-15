@@ -17,6 +17,8 @@ const {
   mkdir,
   cd,
   pwd,
+  chmod,
+  cp,
   exec,
   test,
   rm,
@@ -104,13 +106,14 @@ class UpdateCheckCores {
    */
   async hotUpdate ({ silent } = { silent: false }) {
     const linaCliPath = path.join(path.resolve(process.execPath, '..', '..'), 'lib', '/node_modules', '@linahome', 'cli') // 正式
+    console.log(linaCliPath)
     if (test('-d', linaCliPath)) {
     // if (test('-d', `${pwd().stdout}`)) {
       for (let updateTarget of pkg.updateTargets) {
         await this.pullFiles({
           repository: updateTarget.repository,
           remoteTarget: updateTarget.remoteTarget,
-          dest: `${linaCliPath}`,
+          dest: `${linaCliPath}${updateTarget.dest}`,
           // dest: `${pwd().stdout}${updateTarget.dest}`, // FIXME:临时
           silent
         })
@@ -162,8 +165,9 @@ class UpdateCheckCores {
             `fail to pull ${remoteTarget}, please check parameter and try again`
           )
         } else {
-          mkdir('-p', `${dest}`) // 确保目录存在
-          isDirectory ? mv(`tmp/${remoteTarget}/*`, `${dest}/`) : mv(`tmp/${remoteTarget}`, `${dest}/`)
+          // mkdir('-p', `${dest}`) // 确保目录存在
+          // chmod('-R', 755, `${dest}`)
+          isDirectory ? cp('-r', `tmp/${remoteTarget}/*`, `${dest}`) : cp('-f', `tmp/${remoteTarget}`, `${dest}`)
           !silent && spinner.succeed(chalk.green(`hot update: ${remoteTarget} succeed`))
         }
         rm('-rf', `tmp`) // 移除临时的目录

@@ -17,7 +17,7 @@ $ npm i -g @linahome/cli
 # 初始化配置, 在当前文件夹创建一个lina.config.js, 用以作为lina的配置
 $ lina init
 
-# 初始化配置, 在当前文件夹创建一个lina.config.js, 用以作为lina的配置
+# 热更新核心代码
 $ lina hot-update
 
 

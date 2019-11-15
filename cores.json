@@ -19,7 +19,7 @@
     {
       "repository": "https://github.com/guanlinwu/lina.git",
       "remoteTarget": "cores.json",
-      "dest": "/"
+      "dest": ""
     }
   ]
 }
