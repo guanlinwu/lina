@@ -72,10 +72,10 @@ exports.handler = function (argv) {
 
     findPkg() // 如果命令行有模块名直接进行拉去操作
   } else {
-    inputPackage() // 如果命令行没有模块名，则需要远程拉取所有包名
+    getPackagesName() // 如果命令行没有模块名，则需要远程拉取所有包名
   }
 
-  async function inputPackage() {
+  async function getPackagesName() {
     const depArr = linaConfig.dependencies
     let len = depArr.length
     // 输入的参数 [--git-alias = lina] 或者 [--git-alias  lina]
@@ -89,7 +89,8 @@ exports.handler = function (argv) {
       }
     }
     try {
-      await getPackageData(configUrl)
+      let { data } = await fly.get(configUrl)
+      packageData = JSON.parse(data).packages
       let { package } = await inquirer.prompt([
         {
           type: 'rawlist',
@@ -113,16 +114,6 @@ exports.handler = function (argv) {
     } catch (e) {
       console.error(1111, e)
     }
-  }
-
-  /*
-   * 获取所有的包的数据
-   *
-   * */
-
-  async function getPackageData(url) {
-    let { data } = await fly.get(url)
-    packageData = JSON.parse(data).packages
   }
 
   /*
