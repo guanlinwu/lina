@@ -29,7 +29,7 @@ exports.handler = function (argv) {
   let packageData = []
   // 要安装的包名
   let packageName = ''
-  let configUrl = 'https://raw.githubusercontent.com/guanlinwu/lina-ui/master/src/config.json'
+  let configUrl = ''
   // 如果不存在配置文件, 则提示需要执行lina init
   if (!initConfig.hasInit()) {
     shell.echo(chalk.red(`Sorry, this config file ${ chalk.yellow(configFileName) } is not found.`))
@@ -76,6 +76,18 @@ exports.handler = function (argv) {
   }
 
   async function inputPackage() {
+    const depArr = linaConfig.dependencies
+    let len = depArr.length
+    // 输入的参数 [--git-alias = lina] 或者 [--git-alias  lina]
+    let { gitAlias, 'git-alias': literalAlias = 'lina' } = argv
+    let tmpAlias = gitAlias || literalAlias
+    while (len --) {
+      let item = depArr[len]
+      if (item.alias === tmpAlias) {
+        configUrl = item.config
+        break
+      }
+    }
     try {
       await getPackageData(configUrl)
       let { package } = await inquirer.prompt([
@@ -135,6 +147,7 @@ exports.handler = function (argv) {
           repository,
           pkgSrc
         })
+        break
       }
     }
   }
@@ -143,10 +156,7 @@ exports.handler = function (argv) {
    * 执行git 拉取操作
    * */
 
-  function pullPkg({
-                     repository,
-                     pkgSrc
-                   }) {
+  function pullPkg({ repository, pkgSrc }) {
     spinner.text = `now pulling ${ argv.pkgName || packageName }\n`
     console.log('current path:', pwd().stdout)
     exec('git init', { silent: true, async: false })
