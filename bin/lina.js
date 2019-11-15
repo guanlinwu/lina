@@ -24,7 +24,7 @@ const chalk = require('chalk')
     .demandCommand(1, ' ')
     .help()
     .locale('en')
-    .epilog(chalk.cyan('for more information visit https://github.com/guanlinwu/lina')) // final message to display when successful.
+    .epilog(chalk.cyan('for more information visit: \n https://www.npmjs.com/package/@linahome/cli \n https://www.npmjs.com/package/lina-ui')) // final message to display when successful.
     .fail((msg, err, yargs) => {
       if (err) throw err
       console.error(msg)

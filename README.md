@@ -1,9 +1,16 @@
 # lina
+配合[lina-ui](https://www.npmjs.com/package/lina-ui)，可以把指定的ui组件拉取下来，进行二次开发。
 
 ## 安装
 ```bash
 $ npm i -g @linahome/cli
 ```
+
+# 更新日志
+[CHANGELOG](https://github.com/guanlinwu/lina/blob/master/CHANGELOG.md)
+
+# issues
+[issues](https://github.com/guanlinwu/lina/issues)
 
 ## 相关指令
 ```bash
