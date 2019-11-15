@@ -1,6 +1,6 @@
 {
   "name": "@linahome/cli",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "lina components manage",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -22,7 +22,7 @@
   "bin": {
     "lina": "bin/lina.js"
   },
-  "devDependencies": {
+  "dependencies": {
     "boxen": "^4.1.0",
     "chalk": "^3.0.0",
     "configstore": "^5.0.0",
@@ -43,6 +43,5 @@
   },
   "engines": {
     "node": ">=8"
-  },
-  "dependencies": {}
+  }
 }
