@@ -1,7 +1,7 @@
 {
   "name": "@linahome/cli",
   "version": "1.0.1",
-  "coresVersion": "0.0.0",
+  "coresVersion": "1.0.0",
   "description": "lina components manage",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
