@@ -21,15 +21,17 @@ const chalk = require('chalk')
     .commandDir('../cmds', { recurse: false })
     .alias('h', 'help')
     .alias('v', 'version')
+    .demandCommand(1, ' ')
     .help()
-    .epilog(chalk.yellow('for more information visit https://github.com/guanlinwu/lina')) // final message to display when successful.
+    .locale('en')
+    .epilog(chalk.cyan('for more information visit https://github.com/guanlinwu/lina')) // final message to display when successful.
     .fail((msg, err, yargs) => {
       if (err) throw err
       console.error(msg)
-      console.error('you can do this: \n', yargs.help())
+      console.log(chalk.cyan('You can do this: \n'))
+      console.log(chalk.white(`Usage: ` + yargs.help()))
       process.exit(1)
     }).argv
-
   // console.log('from bin/lina.js: ', argv)
 })()
 
