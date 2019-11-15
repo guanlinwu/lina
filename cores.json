@@ -1,0 +1,24 @@
+{
+  "updateTargets": [
+    {
+      "repository": "https://github.com/guanlinwu/lina.git",
+      "remoteTarget": "cores",
+      "dest": "/cores"
+    },
+    {
+      "repository": "https://github.com/guanlinwu/lina.git",
+      "remoteTarget": "cmds",
+      "dest": "/cmds"
+    },
+    {
+      "repository": "https://github.com/guanlinwu/lina.git",
+      "remoteTarget": "templates",
+      "dest": "/templates"
+    },
+    {
+      "repository": "https://github.com/guanlinwu/lina.git",
+      "remoteTarget": "cores.json",
+      "dest": "/"
+    }
+  ]
+}

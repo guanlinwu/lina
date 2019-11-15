@@ -37,7 +37,7 @@ project/
 + README.md 使用文档
 + CHANGELOG.md 开发文档，不发布到npm
 + bin/ 导出的命令
-+ cmds/ 命令模块
++ cmds/ 命令模块 可自动更新
 + cores/ 核心业务代码 可自动更新
 + templates/ 文件模版 可自动更新
 + utils/ 工具包
@@ -63,3 +63,4 @@ cores/init-config.js 有一个hasInit的方法，用来判断是否已经初始�
 // ==/UserScript==
 ```
 + 通过package.json 的 coresVersion 来控制cores文件夹的版本
++ 通过hot-update.json 的 coresVersion 来控制cores文件夹的版本

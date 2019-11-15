@@ -1,18 +1,17 @@
 #!/usr/bin/env node
 
 const chalk = require('chalk')
-const figlet = require('figlet')
+// const figlet = require('figlet')
 
 require('../utils/update-check').updateCheck() // 检查更新
 require('../utils/update-check-core').updateCheckCores() // 检查更新
 
-
 /**
  * 用_｜/\输出英文 lina
  */
-console.log(
-  chalk.magenta(figlet.textSync('lina', { horizontalLayout: 'full' }))
-)
+// console.log(
+//   chalk.magenta(figlet.textSync('lina', { horizontalLayout: 'full' }))
+// )
 
 const argv = require('yargs')
   .commandDir('../cmds', { recurse: true })

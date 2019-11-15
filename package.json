@@ -1,7 +1,7 @@
 {
   "name": "@linahome/cli",
   "version": "1.0.1",
-  "coresVersion": "1.0.0",
+  "coresVersion": "0.0.0",
   "description": "lina components manage",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -26,6 +26,7 @@
   "devDependencies": {
     "boxen": "^4.1.0",
     "chalk": "^3.0.0",
+    "configstore": "^5.0.0",
     "figlet": "^1.2.4",
     "flyio": "^0.6.14",
     "fs-extra": "^8.1.0",
