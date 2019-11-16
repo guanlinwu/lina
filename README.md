@@ -20,7 +20,6 @@ $ lina init
 # 热更新核心代码
 $ lina hot-update
 
-
 $ lina package pull <packageName>
 # 拉取指定的模块，如果不指定packageName，默认会弹出全部列表进行选择
 # 可选的模块有

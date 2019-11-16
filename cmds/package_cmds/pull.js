@@ -30,19 +30,19 @@ exports.handler = function (argv) {
     process.exit(1) // 强制退出
   }
 
+  // 判断是否有安装git
+  if (!which('git')) {
+    shell.echo('Sorry, this script requires git')
+    shell.echo('\u001b[32m click here to download https://git-scm.com\u001b[0m')
+    process.exit(1) // 强制退出
+  }
+
   // 获取配置文件
   const linaConfig = require(`${ pwd().stdout }/${ configFileName }`)
   // props of class
   const options = {
     argv,
     linaConfig
-  }
-
-  // 判断是否有安装git
-  if (!which('git')) {
-    shell.echo('Sorry, this script requires git')
-    shell.echo('\u001b[32m click here to download https://git-scm.com\u001b[0m')
-    process.exit(1) // 强制退出
   }
 
   // 判断git版本号,必须大于1.7.0
