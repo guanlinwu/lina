@@ -3,7 +3,7 @@ const semver = require('semver')
 const chalk = require('chalk')
 const initConfig = require('../../cores/init-config.js') // 初始化逻辑
 const configFileName = 'lina.config.js' // 配置文件名称
-const HandlePull = require('../../utils/handlePull')
+const { HandlePull } = require('../../utils/handlePull')
 
 exports.command = 'pull [pkgName]'
 exports.desc = 'pull specific packages <pkgName> from remote repository'
@@ -56,5 +56,6 @@ exports.handler = function (argv) {
     }
   }
 
-  new HandlePull.HandlePull(options)
+  // in ES6, lacking of the `new` key word will throw error
+  new HandlePull(options)
 }

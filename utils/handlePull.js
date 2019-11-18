@@ -149,4 +149,10 @@ class HandlePull {
     })
   }
 }
-exports.HandlePull = HandlePull
+// use shorthand for module.exports
+// exports.HandlePull = HandlePull
+
+// or use full formation -> module.exports = { key: value }
+module.exports = {
+  HandlePull
+}
