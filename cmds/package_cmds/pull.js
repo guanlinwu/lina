@@ -56,6 +56,10 @@ exports.handler = function (argv) {
     }
   }
 
-  // in ES6 class, lacking of the `new` key word will throw error
+  // in ES6 class, lacking of the `new` key word will throw error.
+  // but in es5, there is no concept about class,
+  // usually use constructor function to create objects(class),
+  // if there is without the `new` key word, majorities will use `instanceof` to check whether `this` is
+  // the instance of object(class), thus we can use this syntax: HandlePull(options), without new
   new HandlePull(options)
 }
