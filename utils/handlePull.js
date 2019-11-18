@@ -89,7 +89,7 @@ class HandlePull {
 
     } catch (e) {
       console.error('错误✖', e)
-      spinner.fail('error')
+      spinner.fail('error， please retry again')
     }
   }
 
