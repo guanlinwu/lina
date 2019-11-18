@@ -56,6 +56,6 @@ exports.handler = function (argv) {
     }
   }
 
-  // in ES6, lacking of the `new` key word will throw error
+  // in ES6 class, lacking of the `new` key word will throw error
   new HandlePull(options)
 }
