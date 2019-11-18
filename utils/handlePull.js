@@ -73,7 +73,7 @@ class HandlePull {
           name: 'packages',
           message: '请选择模块名',
           pageSize: packageData.length,
-          choices: packageData.map(item => item.name)
+          choices: packageData.filter(item => item.type && ~item.type.indexOf('component'))
         }
       ])
       console.log('已选模块：', packages)
