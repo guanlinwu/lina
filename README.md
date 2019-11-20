@@ -26,9 +26,9 @@ $ lina hot-update
 
 ```
 ```bash
-$ lina package pull <packageName>
+$ lina package pull [packageName] [--git-alias]
 # 拉取指定的模块，如果不指定packageName，默认会弹出全部列表进行选择
-
+# --git-alias如果不指定，默认为lina
 # 可选的模块有
  - Tabs
  - DatetimePicker
