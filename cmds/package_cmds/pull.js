@@ -5,11 +5,14 @@ const initConfig = require('../../cores/init-config.js') // 初始化逻辑
 const configFileName = 'lina.config.js' // 配置文件名称
 const { HandlePull } = require('../../utils/handlePull')
 
-exports.command = 'pull [pkgName]'
-exports.desc = 'pull specific packages <pkgName> from remote repository'
+exports.command = 'pull [pkgName] [git-alias]'
+exports.desc = 'pull specific packages [pkgName] [--git-alias] from remote repository'
 exports.builder = {
   pkgName: {
     default: ''
+  },
+  'git-alias': {
+    default: 'lina'
   }
 }
 exports.handler = function (argv) {
