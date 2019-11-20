@@ -25,7 +25,7 @@ const chalk = require('chalk')
     .help()
     .locale('en')
     .example('lina pull Dialog', 'pull the Dialog module(packages)')
-    .example('lina pull view1 --git-alias=views-libs', 'pull the view1 module(packages) with alias of repository: views-libs,lina is the default one if no this parameter')
+    .example('lina pull view1 --git-alias=views-libs', 'pull the view1 module(packages) with alias of repository: views-libs,lina is the default one if lacked')
     .epilog(chalk.cyan('for more information visit: \n https://www.npmjs.com/package/@linahome/cli \n https://www.npmjs.com/package/lina-ui')) // final message to display when successful.
     .fail((msg, err, yargs) => {
       if (err) throw err
