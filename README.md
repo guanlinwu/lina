@@ -29,15 +29,16 @@ $ lina hot-update
 $ lina package pull [packageName] [--git-alias]
 # 拉取指定的模块，如果不指定packageName，默认会弹出全部列表进行选择
 # --git-alias如果不指定，默认为lina
-# 可选的模块有
- - Tabs
- - DatetimePicker
- - Picker
- - PullRefresh
- - CarouselNotice
- - PopCurtain
- - Popup
- - ActionSheet
- - Dialog
- - Toast
 ```
+
+ **可选的模块有**
+ 1. Tabs
+ 1. DatetimePicker
+ 1. Picker
+ 1. PullRefresh
+ 1. CarouselNotice
+ 1. PopCurtain
+ 1. Popup
+ 1. ActionSheet
+ 1. Dialog
+
