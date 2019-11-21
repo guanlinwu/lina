@@ -77,6 +77,7 @@ class HandlePull {
     // 输入的参数 [--git-alias = lina] 或者 [--git-alias  lina]
     let { gitAlias, 'git-alias': literalAlias } = this.argv
     let tmpAlias = gitAlias || literalAlias
+
     while (len --) {
       let item = depArr[len]
       if (item.alias === tmpAlias) {
