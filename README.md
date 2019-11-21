@@ -32,13 +32,13 @@ $ lina package pull [packageName] [--git-alias]
 ```
 ----
  **可选的模块有**
- 666. Tabs
- 666. DatetimePicker
- 666. Picker
- 666. PullRefresh
- 666. CarouselNotice
- 666. PopCurtain
- 666. Popup
- 666. ActionSheet
- 666. Dialog
+- Tabs
+- DatetimePicker
+- Picker
+- PullRefresh
+- CarouselNotice
+- PopCurtain
+- Popup
+- ActionSheet
+- Dialog
 
