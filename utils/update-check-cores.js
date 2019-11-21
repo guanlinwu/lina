@@ -6,7 +6,7 @@
  */
 const fs = require('fs')
 const path = require('path')
-const pkg = require('../cores.json')
+const pkgCores = require('../cores.json')
 const fly = require('flyio')
 const chalk = require('chalk')
 const shell = require('shelljs')
@@ -16,22 +16,24 @@ const semver = require('semver')
 const {
   mkdir,
   cd,
-  pwd,
-  chmod,
   cp,
   exec,
   test,
-  rm,
-  mv
+  rm
 } = shell
+/**
+ * 一天的时间，默认是检查更新周期
+ */
+const ONE_DAY = 1000 * 60 * 60 * 24
 /**
  * cores文件热更新模块
  *
  * @class UpdateCheckCores
  */
 class UpdateCheckCores {
-  constructor ({
-    pkg
+  constructor ({ pkg, checkInterval } = {
+    pkg: pkgCores,
+    checkInterval: ONE_DAY
   }) {
     /**
      * 远程package.json配置
@@ -50,7 +52,7 @@ class UpdateCheckCores {
      *
      * @type {Number}
      */
-    this.ONE_DAY = 1000 * 60 * 60 * 24
+    this.checkInterval = checkInterval
     /**
      * 缓存配置
      *
@@ -64,7 +66,7 @@ class UpdateCheckCores {
    * @memberof UpdateCheckCores
    */
   async autoCheck () {
-    let _updateCheckInterval = this.ONE_DAY
+    let _updateCheckInterval = this.checkInterval
     let lastUpdateCheckTime = this.config.get('lastUpdateCheckTime') // 上一次检查更新的时间
     let nowTimeStamp = Date.now() // 当前时间
     if (!lastUpdateCheckTime || nowTimeStamp > lastUpdateCheckTime + _updateCheckInterval) { // 如果可以检查更新
@@ -165,7 +167,6 @@ class UpdateCheckCores {
             `fail to pull ${remoteTarget}, please check parameter and try again`
           )
         } else {
-          // mkdir('-p', `${dest}`) // 确保目录存在
           // chmod('-R', 755, `${dest}`)
           isDirectory ? cp('-r', `tmp/${remoteTarget}/*`, `${dest}`) : cp('-f', `tmp/${remoteTarget}`, `${dest}`)
           !silent && spinner.succeed(chalk.green(`hot update: ${remoteTarget} succeed`))
@@ -177,34 +178,4 @@ class UpdateCheckCores {
   }
 }
 
-/**
- * 热更新，不经过缓存，直接查询远程版本
- */
-exports.checkUpdateRemote = async ({silent} = {silent: false}) => {
-  // console.log('checkUpdateRemote')
-  try {
-    let updateCheckCoresObj = new UpdateCheckCores({
-      pkg
-    })
-    await updateCheckCoresObj.checkUpdateRemote({
-      silent
-    })
-  } catch (error) {
-    console.log(error)
-  }
-}
-
-/**
- * 热更新，经过缓存，再查询远程版本
- */
-exports.updateCheckCores = async () => {
-  // console.log('updateCheckCores')
-  try {
-    let updateCheckCoresObj = new UpdateCheckCores({
-      pkg
-    })
-    await updateCheckCoresObj.autoCheck()
-  } catch (error) {
-    console.log(error)
-  }
-}
+module.exports = UpdateCheckCores

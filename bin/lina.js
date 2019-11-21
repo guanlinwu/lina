@@ -1,12 +1,13 @@
 #!/usr/bin/env node
 
 const chalk = require('chalk')
-// const figlet = require('figlet')
+const UpdateCheckCores = require('../utils/update-check-cores')
 
+// const figlet = require('figlet')
 ;(async () => {
   try {
     await require('../utils/update-check').updateCheck() // 检查更新
-    await require('../utils/update-check-cores').updateCheckCores() // 检查更新
+    await new UpdateCheckCores().autoCheck() // 热更新，经过缓存，再查询远程版本
   } catch (error) {
     console.log(error)
   }
