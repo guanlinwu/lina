@@ -1,7 +1,7 @@
 const shell = require('shelljs')
 const semver = require('semver')
 const chalk = require('chalk')
-const initConfig = require('../../cores/init-config.js') // 初始化逻辑
+const initConfig = require('../../utils/init-config') // 初始化逻辑
 const configFileName = 'lina.config.js' // 配置文件名称
 const { HandlePull } = require('../../utils/handlePull')
 

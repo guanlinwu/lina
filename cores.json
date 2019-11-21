@@ -3,11 +3,6 @@
   "updateTargets": [
     {
       "repository": "https://github.com/guanlinwu/lina.git",
-      "remoteTarget": "cores",
-      "dest": "/cores"
-    },
-    {
-      "repository": "https://github.com/guanlinwu/lina.git",
       "remoteTarget": "cmds",
       "dest": "/cmds"
     },
